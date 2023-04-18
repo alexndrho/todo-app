@@ -16,6 +16,7 @@ const stitches = createStitches({
       //elements
       fg: '$black',
       border: '0.075rem solid $lightGray',
+      borderError: '0.075rem solid $red',
     },
 
     sizes: {
@@ -30,7 +31,7 @@ const stitches = createStitches({
 
     fontSizes: {
       sm: '0.8rem',
-      md: '0.9rem',
+      md: '1rem',
       l: '1.2rem',
       xl: '3rem',
     },
