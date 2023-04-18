@@ -32,7 +32,7 @@ const stitches = createStitches({
       sm: '0.8rem',
       md: '0.9rem',
       l: '1.2rem',
-      xl: '2.5rem',
+      xl: '3rem',
     },
 
     fontWeights: {

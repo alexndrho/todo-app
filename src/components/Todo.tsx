@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
-import stitches from '../stitches.config';
-import Title from './Title';
 import MenuBar, { Mode, ModeStr } from './MenuBar';
 import AddDetails from './AddDetails';
 import Detail, { Task } from './Detail';
 import DeleteBtn from './DeleteBtn';
+
+import React, { useState } from 'react';
+import stitches from '../stitches.config';
+import { auth } from '../api/firebase';
+import { signOut } from 'firebase/auth';
+import { FirebaseError } from 'firebase/app';
 
 const { styled } = stitches;
 
@@ -15,12 +18,41 @@ const Wrapper = styled('div', {
 });
 
 const Header = styled('header', {
+  position: 'relative',
   width: '100%',
   height: '6.5rem',
   marginBottom: '0.25rem',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+});
+
+const Title = styled('h1', {
+  width: 'auto',
+  height: 'auto',
+  fontFamily: '$title',
+  fontSize: '$xl',
+  fontWeight: '$bolder',
+  color: '$fg',
+  userSelect: 'none',
+});
+
+const SignOutBtn = styled('button', {
+  position: 'absolute',
+  right: '0',
+  width: '5.5rem',
+  height: '2.8rem',
+  fontSize: '0.85rem',
+  fontFamily: '$default',
+  fontWeight: '500',
+  border: 'none',
+  background: '$btnGray',
+  color: '$btnGrayColor',
+  borderRadius: '0.5rem',
+
+  '&:active': {
+    background: '$btnLightGray',
+  },
 });
 
 const Main = styled('main', {
@@ -33,13 +65,19 @@ const DelBtnWrapper = styled('section', {
   height: '2.85rem',
 });
 
-interface Prop {
-  hide: boolean;
-}
-
-const Todo = ({ hide }: Prop) => {
+const Todo = () => {
   const [mode, setMode] = useState<Mode>(Mode.All);
   const [tasks, setTasks] = useState<Array<Task>>([]);
+
+  const signOutHandler = async () => {
+    try {
+      await signOut(auth);
+    } catch (e) {
+      if (e instanceof FirebaseError) {
+        console.log(e.code, ': ', e.message);
+      }
+    }
+  };
 
   const handleSetMode = (mode: ModeStr) => {
     if (mode === 'all') {
@@ -132,9 +170,10 @@ const Todo = ({ hide }: Prop) => {
   };
 
   return (
-    <Wrapper style={{ display: !hide ? 'block' : 'none' }}>
+    <Wrapper>
       <Header>
-        <Title />
+        <Title>#todo</Title>
+        <SignOutBtn onClick={signOutHandler}>Sign Out</SignOutBtn>
       </Header>
       <Main>
         <MenuBar mode={mode} onModeChange={handleSetMode} />

@@ -1,11 +1,19 @@
 import GoogleIcon from '../assets/google-icon.png';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import stitches from '../stitches.config';
+import { auth, googleProvider } from '../api/firebase';
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from 'firebase/auth';
+import { FirebaseError } from 'firebase/app';
 
 const { styled } = stitches;
 
-const Wrapper = styled('div', {
+const Form = styled('form', {
   width: '$conWidthLogin',
   height: '100%',
   display: 'flex',
@@ -81,17 +89,65 @@ const Img = styled('img', {
   marginRight: '0.5rem',
 });
 
-const Login = () => {
+interface Prop {
+  setIsLogin: (x: boolean) => void;
+}
+
+const Login = ({ setIsLogin }: Prop) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsLogin(true);
+      } else {
+        setIsLogin(false);
+      }
+    });
+  }, []);
+
+  const signUpHandler = async () => {
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+    } catch (e) {
+      if (e instanceof FirebaseError) {
+        console.log(e.code, ': ', e.message);
+      }
+    }
+  };
+
+  const logInHandler = async () => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (e) {
+      if (e instanceof FirebaseError) {
+        console.log(e.code, ': ', e.message);
+      }
+    }
+  };
+
+  const signInWithGoogleHandler = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+    } catch (e) {
+      if (e instanceof FirebaseError) {
+        console.log(e.code, ': ', e.message);
+      }
+    }
+  };
+
   return (
-    <Wrapper>
+    <Form onSubmit={(e) => e.preventDefault()}>
       <Title>Login</Title>
       <Label htmlFor='email'>Email</Label>
-      <Input id='email' />
+      <Input id='email' type='email' onChange={(e) => setEmail(e.target.value)} />
       <Label>Password</Label>
-      <Input id='password' type='password' />
+      <Input id='password' type='password' onChange={(e) => setPassword(e.target.value)} />
       <Div>
         <Button
           color='gray'
+          onClick={signUpHandler}
           css={{
             flexGrow: 1,
             marginRight: '0.5rem',
@@ -99,12 +155,13 @@ const Login = () => {
         >
           Sign Up
         </Button>
-        <Button color='blue' css={{ flexGrow: 1 }}>
+        <Button color='blue' onClick={logInHandler} css={{ flexGrow: 1 }}>
           Log In
         </Button>
       </Div>
       <Button
         color='gray'
+        onClick={signInWithGoogleHandler}
         css={{
           display: 'flex',
           justifyContent: 'center',
@@ -114,7 +171,7 @@ const Login = () => {
         <Img src={GoogleIcon} />
         Sign in with Google
       </Button>
-    </Wrapper>
+    </Form>
   );
 };
 
