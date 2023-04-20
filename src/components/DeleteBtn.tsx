@@ -30,7 +30,7 @@ const Img = styled('img', {
 });
 
 interface Props {
-  onDelete: () => void;
+  onDelete: () => Promise<void>;
 }
 
 const DeleteBtn = ({ onDelete }: Props) => {

@@ -43,7 +43,7 @@ const Button = styled('button', {
 
 interface Props {
   isHide: boolean;
-  onAddDetail: (desc: string) => void;
+  onAddDetail: (desc: string) => Promise<void>;
 }
 
 const AddDetails = ({ isHide, onAddDetail }: Props) => {

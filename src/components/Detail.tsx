@@ -53,18 +53,18 @@ const Trash = styled('img', {
 });
 
 export interface Task {
+  id: string;
   description: string | null;
   isCompleted: boolean;
 }
 
 interface Prop {
-  id: number;
   task: Task;
-  onCompleted: (id: number) => void;
-  onDelete: (id: number) => void;
+  onCompleted: (id: string) => Promise<void>;
+  onDelete: (id: string) => Promise<void>;
 }
 
-const Detail = ({ id, task, onCompleted, onDelete }: Prop) => {
+const Detail = ({ task, onCompleted, onDelete }: Prop) => {
   const checkBox = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -74,11 +74,11 @@ const Detail = ({ id, task, onCompleted, onDelete }: Prop) => {
 
   return (
     <Wrapper>
-      <CheckBox type='checkbox' ref={checkBox} onClick={() => onCompleted(id)} />
+      <CheckBox type='checkbox' ref={checkBox} onClick={() => onCompleted(task.id)} />
       <Text style={{ textDecoration: task.isCompleted ? 'line-through' : 'none' }}>
         {task.description}
       </Text>
-      <Trash draggable='false' src={trashImg} alt='trash bin' onClick={() => onDelete(id)} />
+      <Trash draggable='false' src={trashImg} alt='trash bin' onClick={() => onDelete(task.id)} />
     </Wrapper>
   );
 };
