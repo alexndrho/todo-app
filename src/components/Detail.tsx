@@ -39,7 +39,7 @@ const CheckBox = styled('input', {
   },
 });
 
-const Text = styled('p', {
+const Text = styled('label', {
   marginLeft: '0.5rem',
   fontSize: '$l',
   userSelect: 'none',
@@ -74,8 +74,11 @@ const Detail = ({ task, onCompleted, onDelete }: Prop) => {
 
   return (
     <Wrapper>
-      <CheckBox type='checkbox' ref={checkBox} onClick={() => onCompleted(task.id)} />
-      <Text style={{ textDecoration: task.isCompleted ? 'line-through' : 'none' }}>
+      <CheckBox type='checkbox' ref={checkBox} id={task.id} onClick={() => onCompleted(task.id)} />
+      <Text
+        htmlFor={task.id}
+        style={{ textDecoration: task.isCompleted ? 'line-through' : 'none' }}
+      >
         {task.description}
       </Text>
       <Trash draggable='false' src={trashImg} alt='trash bin' onClick={() => onDelete(task.id)} />

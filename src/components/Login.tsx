@@ -13,6 +13,11 @@ import { FirebaseError } from 'firebase/app';
 
 const { styled } = stitches;
 
+const Main = styled('main', {
+  width: '100%',
+  height: '100%',
+});
+
 const Form = styled('form', {
   width: '$conWidthLogin',
   height: '100%',
@@ -189,63 +194,65 @@ const Login = ({ setIsLogin }: Prop) => {
   };
 
   return (
-    <Form onSubmit={(e) => e.preventDefault()}>
-      <Title>Login</Title>
+    <Main>
+      <Form onSubmit={(e) => e.preventDefault()}>
+        <Title>Login</Title>
 
-      <Label htmlFor='email'>Email</Label>
-      <Input
-        id='email'
-        type='email'
-        onChange={(e) => setEmail(e.target.value)}
-        css={{
-          border: emailError === '' ? '$border' : '$borderError',
-        }}
-      />
-      <ErrorMessage>{emailError}</ErrorMessage>
+        <Label htmlFor='email'>Email</Label>
+        <Input
+          id='email'
+          type='email'
+          onChange={(e) => setEmail(e.target.value)}
+          css={{
+            border: emailError === '' ? '$border' : '$borderError',
+          }}
+        />
+        <ErrorMessage>{emailError}</ErrorMessage>
 
-      <Label>Password</Label>
-      <Input
-        id='password'
-        type='password'
-        onChange={(e) => setPassword(e.target.value)}
-        css={{
-          border: passError === '' ? '$border' : '$borderError',
-        }}
-      />
-      <ErrorMessage>{passError}</ErrorMessage>
+        <Label htmlFor='password'>Password</Label>
+        <Input
+          id='password'
+          type='password'
+          onChange={(e) => setPassword(e.target.value)}
+          css={{
+            border: passError === '' ? '$border' : '$borderError',
+          }}
+        />
+        <ErrorMessage>{passError}</ErrorMessage>
 
-      <Div>
+        <Div>
+          <Button
+            color='gray'
+            type='button'
+            onClick={signUpHandler}
+            css={{
+              flexGrow: 1,
+              marginRight: '0.5rem',
+            }}
+          >
+            Sign Up
+          </Button>
+
+          <Button color='blue' type='submit' onClick={logInHandler} css={{ flexGrow: 1 }}>
+            Log In
+          </Button>
+        </Div>
+
         <Button
           color='gray'
           type='button'
-          onClick={signUpHandler}
+          onClick={signInWithGoogleHandler}
           css={{
-            flexGrow: 1,
-            marginRight: '0.5rem',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
-          Sign Up
+          <Img src={GoogleIcon} alt='Google icon' />
+          Sign in with Google
         </Button>
-
-        <Button color='blue' type='submit' onClick={logInHandler} css={{ flexGrow: 1 }}>
-          Log In
-        </Button>
-      </Div>
-
-      <Button
-        color='gray'
-        type='button'
-        onClick={signInWithGoogleHandler}
-        css={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Img src={GoogleIcon} />
-        Sign in with Google
-      </Button>
-    </Form>
+      </Form>
+    </Main>
   );
 };
 

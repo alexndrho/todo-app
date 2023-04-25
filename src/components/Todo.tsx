@@ -96,19 +96,6 @@ const Todo = () => {
     });
   }, []);
 
-  // useEffect(() => {
-  //   const setData = async () => {
-  //     try {
-  //       const docRef = doc(db, 'users', `${uid}`);
-  //       await setDoc(docRef, { todos: tasks });
-  //     } catch (e) {
-  //       console.error(e);
-  //     }
-  //   };
-
-  //   setData();
-  // }, [tasks]);
-
   const signOutHandler = async () => {
     try {
       await signOut(auth);
