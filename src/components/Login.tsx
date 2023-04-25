@@ -16,6 +16,9 @@ const { styled } = stitches;
 const Main = styled('main', {
   width: '100%',
   height: '100%',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
 });
 
 const Form = styled('form', {
